@@ -59,7 +59,6 @@
                                 <td>
                                     @if ($product->image != "")
                                     <img width="60" src="{{ asset('uploads/products/'.$product->image) }}" alt="">
-
                                     @endif
                                 </td>
                                 <td>{{ $product->name }}</td>
@@ -67,8 +66,12 @@
                                 <td>₹ {{ $product->price }}</td>
                                 <td>{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y') }}</td>
                                 <td>
-                                    <a href="" class="btn btn-dark">Edit</a>
-                                    <a href="" class="btn btn-danger">Delete</a>
+                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-dark">Edit</a>
+                                    <a href="#" onclick="deleteProduct({{ $product->id }})" class="btn btn-danger">Delete</a>
+                                    <form id="delete-product-form-{{ $product->id }}" action="{{ route('products.delete', $product->id) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
@@ -87,3 +90,12 @@
 </body>
 
 </html>
+
+
+<script>
+    function deleteProduct(id) {
+        if(confirm("Are you sure you want to delete Product")) {
+            document.getElementById("delete-product-form-"+id).submit();
+        }
+    }
+</script>
